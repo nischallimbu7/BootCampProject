@@ -18,6 +18,7 @@ namespace UnityStandardAssets.ImageEffects
 
         private RenderTexture accumTexture;
 
+        [Obsolete]
         override protected void Start()
         {
             if (!SystemInfo.supportsRenderTextures)
@@ -35,6 +36,7 @@ namespace UnityStandardAssets.ImageEffects
         }
 
         // Called by camera to apply image effect
+        [Obsolete]
         void OnRenderImage (RenderTexture source, RenderTexture destination)
         {
             // Create the accumulation texture

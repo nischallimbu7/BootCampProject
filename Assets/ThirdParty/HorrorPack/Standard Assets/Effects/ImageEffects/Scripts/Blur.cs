@@ -43,6 +43,7 @@ namespace UnityStandardAssets.ImageEffects
 
         // --------------------------------------------------------
 
+        [Obsolete]
         protected void Start()
         {
             // Disable if we don't support image effects

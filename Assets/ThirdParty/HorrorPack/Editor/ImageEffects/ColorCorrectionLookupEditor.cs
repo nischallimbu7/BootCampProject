@@ -15,7 +15,8 @@ namespace UnityStandardAssets.ImageEffects
 
         private Texture2D tempClutTex2D;
 
-
+        [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override void OnInspectorGUI () {
             serObj.Update ();
 
@@ -86,5 +87,6 @@ namespace UnityStandardAssets.ImageEffects
 
             serObj.ApplyModifiedProperties();
         }
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
     }
 }

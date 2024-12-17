@@ -70,6 +70,7 @@ namespace UnityStandardAssets.ImageEffects
             isSupported = true;
         }
 
+        [Obsolete]
         protected bool CheckSupport ()
 		{
             return CheckSupport (false);
@@ -88,6 +89,7 @@ namespace UnityStandardAssets.ImageEffects
             CheckResources ();
         }
 
+        [Obsolete]
         protected bool CheckSupport (bool needDepth)
 		{
             isSupported = true;
@@ -112,6 +114,7 @@ namespace UnityStandardAssets.ImageEffects
             return true;
         }
 
+        [Obsolete]
         protected bool CheckSupport (bool needDepth,  bool needHdr)
 		{
             if (!CheckSupport(needDepth))

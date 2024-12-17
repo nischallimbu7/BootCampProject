@@ -104,7 +104,7 @@ namespace UnityStandardAssets.ImageEffects
             }
         }
 
-
+        [Obsolete]
         public override bool CheckResources () {
             CheckSupport (true, true); // depth & hdr needed
             motionBlurMaterial = CheckShaderAndCreateMaterial (shader, motionBlurMaterial);

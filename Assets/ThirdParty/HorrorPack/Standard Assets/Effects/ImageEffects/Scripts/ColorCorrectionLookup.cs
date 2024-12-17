@@ -14,7 +14,8 @@ namespace UnityStandardAssets.ImageEffects
         public Texture3D converted3DLut = null;
         public string basedOnTempTex = "";
 
-
+        [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override bool CheckResources () {
             CheckSupport (false);
 
@@ -24,6 +25,7 @@ namespace UnityStandardAssets.ImageEffects
                 ReportAutoDisable ();
             return isSupported;
         }
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
         void OnDisable () {
             if (material) {

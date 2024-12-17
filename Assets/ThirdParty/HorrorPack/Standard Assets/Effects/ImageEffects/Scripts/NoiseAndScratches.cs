@@ -41,6 +41,7 @@ namespace UnityStandardAssets.ImageEffects
         private float scratchTimeLeft = 0.0f;
         private float scratchX, scratchY;
 
+        [Obsolete]
         protected void Start ()
         {
             // Disable if we don't support image effects

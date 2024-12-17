@@ -37,8 +37,10 @@ namespace UnityStandardAssets.ImageEffects
 
         private static float TILE_AMOUNT = 64.0f;
 
-
+        [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override bool CheckResources ()
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 		{
             CheckSupport (false);
 

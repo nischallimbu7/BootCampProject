@@ -28,7 +28,8 @@ namespace UnityStandardAssets.ImageEffects
         public Shader blurShader = null;
         private Material blurMaterial = null;
 
-
+        [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override bool CheckResources () {
             CheckSupport (false);
 
@@ -38,6 +39,7 @@ namespace UnityStandardAssets.ImageEffects
                 ReportAutoDisable ();
             return isSupported;
         }
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
         public void OnDisable () {
             if (blurMaterial)

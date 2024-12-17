@@ -24,8 +24,10 @@ namespace UnityStandardAssets.ImageEffects
         public Shader fogShader = null;
         private Material fogMaterial = null;
 
-
+        [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override bool CheckResources ()
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 		{
             CheckSupport (true);
 

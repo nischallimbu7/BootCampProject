@@ -95,7 +95,8 @@ namespace UnityStandardAssets.ImageEffects
                 bokehMaterial = CheckShaderAndCreateMaterial (bokehShader, bokehMaterial);
         }
 
-
+        [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override bool CheckResources () {
             CheckSupport (true);
 
@@ -110,6 +111,7 @@ namespace UnityStandardAssets.ImageEffects
                 ReportAutoDisable ();
             return isSupported;
         }
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
         void OnDisable () {
             Quads.Cleanup ();

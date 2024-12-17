@@ -50,7 +50,8 @@ namespace UnityStandardAssets.ImageEffects
         private ComputeBuffer cbPoints;
         private float internalBlurWidth = 1.0f;
 
-
+        [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override bool CheckResources () {
             CheckSupport (true); // only requires depth, not HDR
 
@@ -65,6 +66,7 @@ namespace UnityStandardAssets.ImageEffects
 
             return isSupported;
         }
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
         void OnEnable () {
             GetComponent<Camera>().depthTextureMode |= DepthTextureMode.Depth;
@@ -104,6 +106,7 @@ namespace UnityStandardAssets.ImageEffects
             return GetComponent<Camera>().WorldToViewportPoint((worldDist-GetComponent<Camera>().nearClipPlane) * GetComponent<Camera>().transform.forward + GetComponent<Camera>().transform.position).z / (GetComponent<Camera>().farClipPlane-GetComponent<Camera>().nearClipPlane);
         }
 
+        [Obsolete]
         private void WriteCoc ( RenderTexture fromTo, bool fgDilate) {
             dofHdrMaterial.SetTexture("_FgOverlap", null);
 
@@ -142,6 +145,7 @@ namespace UnityStandardAssets.ImageEffects
             }
         }
 
+        [Obsolete]
         void OnRenderImage (RenderTexture source, RenderTexture destination) {
             if (!CheckResources ()) {
                 Graphics.Blit (source, destination);

@@ -4,41 +4,44 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent agent;
-
-    public GameObject player;
+    private Transform playerTransform;
 
     public LayerMask whatIsGround, whatIsPlayer;
 
     public float health;
 
-    //Patroling
+    // Patroling
     public Vector3 walkPoint;
-    bool walkPointSet;
+    private bool walkPointSet;
     public float walkPointRange;
 
-    //Attacking
+    // Attacking
     public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    private bool alreadyAttacked;
 
-    //States
+    // States
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
     private void Awake()
     {
-        player = GameObject.FindWithTag("Player");
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player == null) Debug.LogError("Player not found!");
+
+        playerTransform = player?.transform;
         agent = GetComponent<NavMeshAgent>();
+        if (agent == null) Debug.LogError("NavMeshAgent not found!");
     }
 
     private void Update()
     {
-        //Check for sight and attack range
+        // Check for sight and attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
         if (!playerInSightRange && !playerInAttackRange) Patroling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInAttackRange && playerInSightRange) AttackPlayer();
+        else if (playerInSightRange && !playerInAttackRange) ChasePlayer();
+        else if (playerInAttackRange && playerInSightRange) AttackPlayer();
     }
 
     private void Patroling()
@@ -50,40 +53,46 @@ public class EnemyAI : MonoBehaviour
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        //Walkpoint reached
+        // Walkpoint reached
         if (distanceToWalkPoint.magnitude < 1f)
             walkPointSet = false;
     }
+
     private void SearchWalkPoint()
     {
-        //Calculate random point in range
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        Vector3 potentialPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        NavMeshHit hit;
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
+        if (NavMesh.SamplePosition(potentialPoint, out hit, 2f, NavMesh.AllAreas))
+        {
+            walkPoint = hit.position;
             walkPointSet = true;
+        }
     }
 
     private void ChasePlayer()
     {
-        agent.SetDestination(player.position);
+        agent.SetDestination(playerTransform.position);
     }
 
     private void AttackPlayer()
     {
-        //Make sure enemy doesn't move
-        agent.SetDestination(transform.position);
-
-        transform.LookAt(player);
+        agent.SetDestination(transform.position); // Stop moving
+        transform.LookAt(playerTransform);
 
         if (!alreadyAttacked)
         {
+            Debug.Log("Attacking player!");
+
+            // Perform attack logic here
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
     }
+
     private void ResetAttack()
     {
         alreadyAttacked = false;
@@ -95,6 +104,7 @@ public class EnemyAI : MonoBehaviour
 
         if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
     }
+
     private void DestroyEnemy()
     {
         Destroy(gameObject);

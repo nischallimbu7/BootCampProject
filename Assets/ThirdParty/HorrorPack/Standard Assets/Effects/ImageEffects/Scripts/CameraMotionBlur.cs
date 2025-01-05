@@ -105,6 +105,7 @@ namespace UnityStandardAssets.ImageEffects
         }
 
         [Obsolete]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override bool CheckResources () {
             CheckSupport (true, true); // depth & hdr needed
             motionBlurMaterial = CheckShaderAndCreateMaterial (shader, motionBlurMaterial);
@@ -118,6 +119,7 @@ namespace UnityStandardAssets.ImageEffects
 
             return isSupported;
         }
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
         void OnRenderImage (RenderTexture source, RenderTexture destination) {
             if (false == CheckResources ()) {

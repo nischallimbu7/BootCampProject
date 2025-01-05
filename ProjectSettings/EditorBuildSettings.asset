@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Makeen's scene.unity
+    guid: a52f5f1b54e75e146a52d30554cad120
   m_configObjects: {}

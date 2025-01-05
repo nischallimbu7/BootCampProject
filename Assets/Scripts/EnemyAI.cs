@@ -26,11 +26,20 @@ public class EnemyAI : MonoBehaviour
     private void Awake()
     {
         GameObject player = GameObject.FindWithTag("Player");
-        if (player == null) Debug.LogError("Player not found!");
+        if (player == null)
+        {
+            Debug.LogError("Player not found! Ensure the player GameObject has the tag 'Player'.");
+            enabled = false;
+            return;
+        }
 
-        playerTransform = player?.transform;
+        playerTransform = player.transform;
         agent = GetComponent<NavMeshAgent>();
-        if (agent == null) Debug.LogError("NavMeshAgent not found!");
+        if (agent == null)
+        {
+            Debug.LogError("NavMeshAgent not found! Attach a NavMeshAgent component to the AI.");
+            enabled = false;
+        }
     }
 
     private void Update()
@@ -39,9 +48,12 @@ public class EnemyAI : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Patroling();
-        else if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        else if (playerInAttackRange && playerInSightRange) AttackPlayer();
+        if (!playerInSightRange && !playerInAttackRange)
+            Patroling();
+        else if (playerInSightRange && !playerInAttackRange)
+            ChasePlayer();
+       // else if (playerInAttackRange && playerInSightRange)
+         //   AttackPlayer();
     }
 
     private void Patroling()
@@ -75,23 +87,29 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
-        agent.SetDestination(playerTransform.position);
+        if (playerTransform != null)
+        {
+            agent.SetDestination(playerTransform.position);
+        }
     }
 
-    private void AttackPlayer()
+    /*private void AttackPlayer()
     {
         agent.SetDestination(transform.position); // Stop moving
-        transform.LookAt(playerTransform);
+        if (playerTransform != null)
+            transform.LookAt(playerTransform);
 
         if (!alreadyAttacked)
         {
             Debug.Log("Attacking player!");
 
             // Perform attack logic here
+            // For example: Deal damage to the player
+
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
-    }
+    }*/
 
     private void ResetAttack()
     {

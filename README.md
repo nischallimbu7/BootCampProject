@@ -1,4 +1,6 @@
 # BootCampProject
+
+This is about a horror game.
  
 Clone this file into your local device and open the project in Unity to start working on it.
 

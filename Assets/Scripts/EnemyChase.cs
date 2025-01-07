@@ -123,14 +123,13 @@ public class EnemyChase : MonoBehaviour
         */
     }
 
-   /* IEnumerator Idle()
+    IEnumerator Idle()
     {
         yield return new WaitForSeconds(2);
        // animator.SetFloat("Idle", true);
         GetNewPatrolPoint();
 
     }
-   */
     IEnumerator GetNewPatrolPoint()
     {
         yield return new WaitForSeconds(3);

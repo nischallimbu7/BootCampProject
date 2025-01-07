@@ -24,6 +24,7 @@ public class EnemyChase : MonoBehaviour
     {
         
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
 
      }
 
@@ -31,27 +32,27 @@ public class EnemyChase : MonoBehaviour
     void Update()
     {
 
-        //direction = (player.position - transform.position).normalized;
+        direction = (player.position - transform.position).normalized;
 
-        //RaycastHit hit;
+        RaycastHit hit;
         
-        //if (Physics.Raycast(transform.position + rayCastOffset, direction, out hit, sightDistance))
+        if (Physics.Raycast(transform.position + rayCastOffset, direction, out hit, sightDistance))
 
-        //{
-        //    if (hit.collider.gameObject.tag == "Player")
+        {
+            if (hit.collider.gameObject.tag == "Player")
 
-        //    {
-        //        Debug.Log("player spotted by raycast");
-        //        // walking = false;
-        //        StopCoroutine("Wait");
-        //    }
-        //}
+            {
+                Debug.Log("player spotted by raycast");
+                // walking = false;
+                StopCoroutine("Wait");
+           }
+        }
 
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
         // distance between enemy and random location
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
-
+        animator.SetFloat("Walk", agent.speed);
         
 
         if (playerDistance>detectRange) //if player is out of range
@@ -84,10 +85,14 @@ public class EnemyChase : MonoBehaviour
     void Patrol()
     {
         agent.SetDestination(patrolPoint[patrolIndex].position);
+        //animator.SetBool("isWalking", true);
         if (distanceToPatrol < 1) //if enemy reaches its patrol point
         {
             // tell enemy to go to another random location
             GetNewPatrolPoint();
+            //idle for a while
+            //walkSpeed = 0;
+            
         }
     }
     void GetNewPatrolPoint()
@@ -110,7 +115,7 @@ public class EnemyChase : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectRange);
-        Gizmos.DrawRay(transform.position + rayCastOffset, direction);
+        Debug.DrawRay(transform.position + rayCastOffset, direction);
         
     }
 

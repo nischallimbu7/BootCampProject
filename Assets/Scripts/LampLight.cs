@@ -19,8 +19,11 @@ public class LampLight : MonoBehaviour
         {
             lamp.intensity -= Time.deltaTime * reductionSpeed;
         }
+<<<<<<< Updated upstream
 
        
+=======
+>>>>>>> Stashed changes
         
     }
 

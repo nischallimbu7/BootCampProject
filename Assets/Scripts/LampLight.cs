@@ -18,13 +18,7 @@ public class LampLight : MonoBehaviour
         if (lamp.intensity >0)
         {
             lamp.intensity -= Time.deltaTime * reductionSpeed;
-        }
-<<<<<<< Updated upstream
-
-       
-=======
->>>>>>> Stashed changes
-        
+        }        
     }
 
    

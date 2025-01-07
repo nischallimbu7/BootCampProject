@@ -43,7 +43,7 @@ public class EnemyChase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        #region variables
         direction = (player.position - transform.position).normalized;
 
         RaycastHit hit;
@@ -55,7 +55,7 @@ public class EnemyChase : MonoBehaviour
         // distance between enemy and random location
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
         animator.SetFloat("Walk", agent.speed);
-
+#endregion
 
 
         if (Physics.Raycast(transform.position + rayCastOffset, direction, out hit, sightDistance))
@@ -68,7 +68,7 @@ public class EnemyChase : MonoBehaviour
             }
         }
 
-        else if (playerDistance > detectRange && !transitioning) //if player is out of range
+        else if (playerDistance > detectRange) //if player is out of range
         {
             SetNewState(State.Patrol);
 
@@ -76,7 +76,7 @@ public class EnemyChase : MonoBehaviour
             //Invoke("Patrol", 5); 
             StartCoroutine(DelayedSetPatrol());
             transitioning = true;
-            //
+            
         }
         else if (playerDistance < detectRange) // if enemy sees player
         {
@@ -101,8 +101,9 @@ public class EnemyChase : MonoBehaviour
         //animator.SetBool("isWalking", true);
         if (distanceToPatrol < 1) //if enemy reaches its patrol point
         {
+            StartCoroutine(GetNewPatrolPoint());
             // tell enemy to go to another random location
-            GetNewPatrolPoint();
+            
             //idle for a while
             //walkSpeed = 0;
 
@@ -112,14 +113,27 @@ public class EnemyChase : MonoBehaviour
     IEnumerator DelayedSetPatrol()
     {
         yield return new WaitForSeconds(2);
-
+        Patrol();
         GetNewPatrolPoint();
+        
+        /*GetNewPatrolPoint();
         agent.speed = walkSpeed;
         agent.SetDestination(patrolPoint[patrolIndex].position);
         transitioning = false;
+        */
     }
-    void GetNewPatrolPoint()
+
+   /* IEnumerator Idle()
     {
+        yield return new WaitForSeconds(2);
+       // animator.SetFloat("Idle", true);
+        GetNewPatrolPoint();
+
+    }
+   */
+    IEnumerator GetNewPatrolPoint()
+    {
+        yield return new WaitForSeconds(3);
         patrolIndex = Random.Range(0, patrolPoint.Length);
         Debug.Log("new patrol index is " + patrolIndex);
     }

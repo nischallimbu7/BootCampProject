@@ -5,6 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class EnemyChase : MonoBehaviour
 {
+    public enum State
+    {
+        Patrol,
+        Chase,
+        Attack
+    }
+
+    public State currentState;
+
     public Transform player;
     NavMeshAgent agent;
     public Transform[] patrolPoint;
@@ -14,19 +23,22 @@ public class EnemyChase : MonoBehaviour
     public Vector3 rayCastOffset;
     public float sightDistance, catchDistance;
     public float chaseSpeed, walkSpeed;
-    
-    
+    public Material material;
+
+
     public Animator animator;
     public string DeathScene;
     Vector3 direction;
- 
+
+    private bool transitioning = false;
+
     void Start()
     {
-        
+
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-     }
+    }
 
     // Update is called once per frame
     void Update()
@@ -35,43 +47,42 @@ public class EnemyChase : MonoBehaviour
         direction = (player.position - transform.position).normalized;
 
         RaycastHit hit;
-        
-        if (Physics.Raycast(transform.position + rayCastOffset, direction, out hit, sightDistance))
 
-        {
-            if (hit.collider.gameObject.tag == "Player")
-
-            {
-                Debug.Log("player spotted by raycast");
-                // walking = false;
-                StopCoroutine("Wait");
-           }
-        }
+        Debug.DrawLine(transform.position, transform.position + direction * sightDistance, Color.cyan);
 
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
         // distance between enemy and random location
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
         animator.SetFloat("Walk", agent.speed);
-        
 
-        if (playerDistance>detectRange) //if player is out of range
+
+
+        if (Physics.Raycast(transform.position + rayCastOffset, direction, out hit, sightDistance))
+
         {
-            //StartCoroutine("Wait");
-            //new WaitForSeconds(2);
-            //StopCoroutine("Wait");
-            //enemy goes to its patrol point
-            Patrol();
-            agent.speed = walkSpeed;
+            if (hit.collider.gameObject.tag == "Player")
+
+            {
+                Chase();
+            }
         }
-        else if ( playerDistance<detectRange ) // if enemy sees player
+
+        else if (playerDistance > detectRange && !transitioning) //if player is out of range
         {
-            // enemy chases player
-            //Debug.Log("player spotted");
-            agent.SetDestination(player.position);
-            agent.speed = chaseSpeed;
-            
-            
+            SetNewState(State.Patrol);
+
+            //enemy goes to its patrol point after a delay
+            //Invoke("Patrol", 5); 
+            StartCoroutine(DelayedSetPatrol());
+            transitioning = true;
+            //
+        }
+        else if (playerDistance < detectRange) // if enemy sees player
+        {
+            Chase();
+
+
             //if (playerDistance <= catchDistance) // if enemy catches player
             //{
             //    //player is dead
@@ -80,6 +91,8 @@ public class EnemyChase : MonoBehaviour
             //    animator.SetBool("Attack", true);
             //    StartCoroutine("DeathSequence");
             //}
+
+
         }
     }
     void Patrol()
@@ -92,13 +105,53 @@ public class EnemyChase : MonoBehaviour
             GetNewPatrolPoint();
             //idle for a while
             //walkSpeed = 0;
-            
+
         }
+    }
+
+    IEnumerator DelayedSetPatrol()
+    {
+        yield return new WaitForSeconds(2);
+
+        GetNewPatrolPoint();
+        agent.speed = walkSpeed;
+        agent.SetDestination(patrolPoint[patrolIndex].position);
+        transitioning = false;
     }
     void GetNewPatrolPoint()
     {
         patrolIndex = Random.Range(0, patrolPoint.Length);
         Debug.Log("new patrol index is " + patrolIndex);
+    }
+
+    void Chase()
+
+    {
+
+        // enemy chases player
+        SetNewState(State.Chase);
+
+        agent.SetDestination(player.position);
+        agent.speed = chaseSpeed;
+
+    }
+
+    private void SetNewState(State newState)
+    {
+        currentState = newState;
+
+        switch (currentState)
+        {
+            case State.Patrol:
+                material.color = Color.yellow;
+                break;
+            case State.Chase:
+                material.color = Color.blue;
+                break;
+            case State.Attack:
+                material.color = Color.red;
+                break;
+        }
     }
 
     //IEnumerator Wait()
@@ -116,7 +169,7 @@ public class EnemyChase : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectRange);
         Debug.DrawRay(transform.position + rayCastOffset, direction);
-        
+
     }
 
     //IEnumerator DeathSequence()

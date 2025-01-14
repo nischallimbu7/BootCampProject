@@ -11,6 +11,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Makeen's scene");
     }
 
+    public void OptionsGame()
+    {
+        SceneManager.LoadScene("OptionsMenu");
+    }
+
     public void QuitGame()
     {
         Application.Quit();

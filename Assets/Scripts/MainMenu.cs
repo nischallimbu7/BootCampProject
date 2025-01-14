@@ -11,10 +11,24 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Makeen's scene");
     }
 
+    public void SelectLevel()
+    {
+        SceneManager.LoadScene("SelectLevelToPlay");
+    }
+
     public void OptionsGame()
     {
         SceneManager.LoadScene("OptionsMenu");
     }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+
+
+
 
     public void QuitGame()
     {

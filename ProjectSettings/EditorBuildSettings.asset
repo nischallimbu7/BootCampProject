@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OptionsMenu.unity
     guid: 1ca4c041d1b8683499debbda67d3c4ec
+  - enabled: 1
+    path: Assets/Scenes/CreditsOption.unity
+    guid: db648a7e754be44b9a34e201bbbbdaef
+  - enabled: 1
+    path: Assets/Scenes/SelectLevelToPlay.unity
+    guid: f60be59bf405d46eeab5f283f57b40bf
+  - enabled: 1
+    path: Assets/Scenes/AudioOption.unity
+    guid: e402175b415a746f29e3d8563cd86657
   m_configObjects: {}

@@ -24,8 +24,15 @@ public class EnemyChase : MonoBehaviour
     public float sightDistance, catchDistance;
     public float chaseSpeed, walkSpeed;
     public Material material;
+<<<<<<< Updated upstream
 
 
+=======
+    public bool isSwiping = false, isDistracted = false, isWalking, isHittingPlayer;
+    
+
+    public Distract distract;
+>>>>>>> Stashed changes
     public Animator animator;
     public string DeathScene;
     Vector3 direction;
@@ -82,6 +89,54 @@ public class EnemyChase : MonoBehaviour
         {
             Chase();
 
+<<<<<<< Updated upstream
+=======
+            if (playerDistance <= catchDistance && !isSwiping) // if enemy catches player
+            {
+                SetNewState(State.Attack);
+                
+                animator.SetTrigger("Swiping");
+                isSwiping = true;
+            }
+        }
+    }
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && isSwiping &&isHittingPlayer)
+        {
+            Debug.Log("touched player");
+            StartCoroutine("KillPlayer");
+            isSwiping = false;
+        }
+    }
+
+    IEnumerator KillPlayer()
+    {
+        yield return new WaitForSeconds(2);
+        if (isHittingPlayer && isSwiping)
+        player.gameObject.SetActive(false);
+    }
+   public void Patrol()
+    {
+
+        Debug.Log("Patrol called");
+        agent.SetDestination(patrolPoint[patrolIndex].position);
+        Debug.Log("agent.isStopped= " + agent.isStopped);
+        
+       if (agent.remainingDistance < stopDistance && !agent.isStopped) //if enemy reaches its patrol point
+        {
+            Debug.Log("Enemy reached destination");
+            
+            agent.isStopped = true;
+            agent.speed = 0;
+            
+            //isWalking = false;
+            animator.SetBool("isWalking", false);
+           // Debug.Log("isWalking = " + isWalking);
+            
+            StartCoroutine("GetNewPatrolPoint");
+        }
+>>>>>>> Stashed changes
 
             //if (playerDistance <= catchDistance) // if enemy catches player
             //{

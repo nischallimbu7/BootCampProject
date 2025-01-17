@@ -21,6 +21,10 @@ public class HitBox : MonoBehaviour
         {
             enemyChase.isHittingPlayer = false;
             Debug.Log("enemyChase.isHittingPlayer =" + enemyChase.isHittingPlayer);
+<<<<<<< Updated upstream
+=======
+            
+>>>>>>> Stashed changes
         }
     }
 

@@ -15,7 +15,7 @@ public class EnemyChase : MonoBehaviour
     public State currentState;
 
     public Transform player;
-    NavMeshAgent agent;
+    public NavMeshAgent agent;
     public Transform[] patrolPoint;
     public float detectRange = 5f;
     public int patrolIndex = 0;
@@ -24,18 +24,24 @@ public class EnemyChase : MonoBehaviour
     public float sightDistance, catchDistance, stopDistance;
     public float chaseSpeed, walkSpeed;
     public Material material;
+<<<<<<< Updated upstream
     public bool isSwiping = false, isDistracted = false, isWalking, isHittingPlayer;
     
+=======
+    public bool isSwiping = false, isDistracted = false, isWalking, isHittingPlayer, isFalling=false;
+
+>>>>>>> Stashed changes
 
     public Distract distract;
     public Animator animator;
+    
     public string DeathScene;
     Vector3 direction;
     Vector3 rayDirection;
     public Rigidbody rb;
 
 
-
+   
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -47,9 +53,15 @@ public class EnemyChase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        #region variables
-        direction = (player.position - transform.position).normalized;
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("player rotated");
+            player.transform.rotation = Quaternion.Euler(90, 0, 0);
+        }
+
+            #region variables
+            direction = (player.position - transform.position).normalized;
         rayDirection = (transform.forward).normalized;
 
         RaycastHit hit;
@@ -65,16 +77,16 @@ public class EnemyChase : MonoBehaviour
         bool hasSeenPlayer = Physics.Raycast(transform.position, rayDirection, out hit, sightDistance);
         #endregion
 
-       // Debug.Log("remainingDistance = " + agent.remainingDistance + "isStopped = " + agent.isStopped);
+        // Debug.Log("remainingDistance = " + agent.remainingDistance + "isStopped = " + agent.isStopped);
         Debug.Log("agent.remainingDistance < stopDistance && !agent.isStopped = " + (agent.remainingDistance < stopDistance && !agent.isStopped));
-        
+
 
         if (playerDistance > detectRange && !agent.hasPath) //if player is out of range
         {
             SetNewState(State.Patrol);
 
             Patrol();
-        
+
         }
         else if (hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" || playerDistance < detectRange) // if enemy sees player
         {
@@ -84,7 +96,11 @@ public class EnemyChase : MonoBehaviour
             if (playerDistance <= catchDistance && !isSwiping) // if enemy catches player
             {
                 SetNewState(State.Attack);
+<<<<<<< Updated upstream
                 
+=======
+
+>>>>>>> Stashed changes
                 animator.SetTrigger("Swiping");
                 isSwiping = true;
             }
@@ -92,16 +108,25 @@ public class EnemyChase : MonoBehaviour
     }
     public void OnCollisionEnter(Collision collision)
     {
+<<<<<<< Updated upstream
         if (collision.gameObject.CompareTag("Player") && isSwiping &&isHittingPlayer)
+=======
+        if (collision.gameObject.CompareTag("Player") && isSwiping && isHittingPlayer)
+>>>>>>> Stashed changes
         {
             Debug.Log("touched player");
             StartCoroutine("KillPlayer");
             isSwiping = false;
+<<<<<<< Updated upstream
             
+=======
+
+>>>>>>> Stashed changes
         }
     }
 
     IEnumerator KillPlayer()
+<<<<<<< Updated upstream
     {
         yield return new WaitForSeconds(2);
         if (isHittingPlayer && isSwiping)
@@ -109,26 +134,44 @@ public class EnemyChase : MonoBehaviour
     }
    public void Patrol()
     {
+=======
+    {
+        yield return new WaitForSeconds(3);
+        if (isHittingPlayer && isSwiping)
+
+        {
+            Debug.Log("hit player");
+            isFalling=true;
+            // player.gameObject.SetActive(false);
+
+        }
+
+
+
+    }
+    public void Patrol()
+    {
+>>>>>>> Stashed changes
 
         Debug.Log("Patrol called");
         agent.SetDestination(patrolPoint[patrolIndex].position);
         Debug.Log("agent.isStopped= " + agent.isStopped);
-        
-       if (agent.remainingDistance < stopDistance && !agent.isStopped) //if enemy reaches its patrol point
+
+        if (agent.remainingDistance < stopDistance && !agent.isStopped) //if enemy reaches its patrol point
         {
             Debug.Log("Enemy reached destination");
-            
+
             agent.isStopped = true;
             agent.speed = 0;
-            
+
             //isWalking = false;
             animator.SetBool("isWalking", false);
-           // Debug.Log("isWalking = " + isWalking);
-            
+            // Debug.Log("isWalking = " + isWalking);
+
             StartCoroutine("GetNewPatrolPoint");
         }
 
-       else if (isDistracted)
+        else if (isDistracted)
         {
             agent.SetDestination(distract.transform.position);
             Debug.Log("Enemy distracted");
@@ -140,24 +183,24 @@ public class EnemyChase : MonoBehaviour
     }
     IEnumerator GetNewPatrolPoint()
     {
-            
-            yield return new WaitForSeconds(1);
-            
-            patrolIndex = Random.Range(0, patrolPoint.Length);
-            agent.isStopped = false;
-            //Debug.Log("agent.remainingDistance= " + agent.remainingDistance);
-            //Debug.Log("distanceToPatrol= " + distanceToPatrol);
-            StartCoroutine("WalkToNextPoint");
-        
+
+        yield return new WaitForSeconds(1);
+
+        patrolIndex = Random.Range(0, patrolPoint.Length);
+        agent.isStopped = false;
+        //Debug.Log("agent.remainingDistance= " + agent.remainingDistance);
+        //Debug.Log("distanceToPatrol= " + distanceToPatrol);
+        StartCoroutine("WalkToNextPoint");
+
     }
 
     IEnumerator WalkToNextPoint()
     {
         yield return new WaitForSeconds(3);
-        
+
         //Debug.Log("new target");
         agent.speed = walkSpeed;
-       // isWalking = true;
+        // isWalking = true;
         animator.SetBool("isWalking", true);
     }
 

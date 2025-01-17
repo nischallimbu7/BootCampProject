@@ -2,13 +2,25 @@
 using System.Collections;
 using UnityEngine.AI;
 
+
 public class PatrolState : MonoBehaviour
-{
+{/*
+    
     private NavMeshAgent agent;
 
     public Transform[] patrolPoints;
     public int patrolIndex = 0;
-    void Setup() { }
+    public float sightDistance, catchDistance;
+    public float chaseSpeed, walkSpeed;
+
+
+    void Setup() {
+
+
+        // distance between enemy and random location
+        distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
+
+    }
 
     private void Update()
     {
@@ -46,7 +58,7 @@ public class PatrolState : MonoBehaviour
         agent.SetDestination(patrolPoint[patrolIndex].position);
         transitioning = false;
         */
-    }
+    //}
 
     /* IEnumerator Idle()
      {
@@ -56,10 +68,12 @@ public class PatrolState : MonoBehaviour
 
      }
     */
+    /*
     IEnumerator GetNewPatrolPoint()
     {
         yield return new WaitForSeconds(3);
         patrolIndex = Random.Range(0, patrolPoint.Length);
         Debug.Log("new patrol index is " + patrolIndex);
     }
+*/
 }

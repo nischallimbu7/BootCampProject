@@ -21,76 +21,66 @@ public class EnemyChase : MonoBehaviour
     public int patrolIndex = 0;
     float distanceToPatrol;
     public Vector3 rayCastOffset;
-    public float sightDistance, catchDistance;
+    public float sightDistance, catchDistance, stopDistance;
     public float chaseSpeed, walkSpeed;
     public Material material;
-<<<<<<< Updated upstream
-
-
-=======
     public bool isSwiping = false, isDistracted = false, isWalking, isHittingPlayer;
     
 
     public Distract distract;
->>>>>>> Stashed changes
     public Animator animator;
     public string DeathScene;
     Vector3 direction;
+    Vector3 rayDirection;
+    public Rigidbody rb;
 
-    private bool transitioning = false;
+
 
     void Start()
     {
-
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-
+        agent.isStopped = false;
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         #region variables
         direction = (player.position - transform.position).normalized;
+        rayDirection = (transform.forward).normalized;
 
         RaycastHit hit;
 
-        Debug.DrawLine(transform.position, transform.position + direction * sightDistance, Color.cyan);
+        Debug.DrawLine(transform.position, transform.position + rayDirection * sightDistance, Color.red);
 
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
         // distance between enemy and random location
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
-        animator.SetFloat("Walk", agent.speed);
-#endregion
+        //animator.SetFloat("Walk", agent.speed);
 
+        bool hasSeenPlayer = Physics.Raycast(transform.position, rayDirection, out hit, sightDistance);
+        #endregion
 
-        if (Physics.Raycast(transform.position + rayCastOffset, direction, out hit, sightDistance))
+       // Debug.Log("remainingDistance = " + agent.remainingDistance + "isStopped = " + agent.isStopped);
+        Debug.Log("agent.remainingDistance < stopDistance && !agent.isStopped = " + (agent.remainingDistance < stopDistance && !agent.isStopped));
+        
 
-        {
-            if (hit.collider.gameObject.tag == "Player")
-
-            {
-                Chase();
-            }
-        }
-
-        else if (playerDistance > detectRange) //if player is out of range
+        if (playerDistance > detectRange && !agent.hasPath) //if player is out of range
         {
             SetNewState(State.Patrol);
 
-            //enemy goes to its patrol point after a delay
-            //Invoke("Patrol", 5); 
-            StartCoroutine(DelayedSetPatrol());
-            transitioning = true;
-            
+            Patrol();
+        
         }
-        else if (playerDistance < detectRange) // if enemy sees player
+        else if (hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" || playerDistance < detectRange) // if enemy sees player
         {
+            Debug.Log("saw player");
             Chase();
 
-<<<<<<< Updated upstream
-=======
             if (playerDistance <= catchDistance && !isSwiping) // if enemy catches player
             {
                 SetNewState(State.Attack);
@@ -107,6 +97,7 @@ public class EnemyChase : MonoBehaviour
             Debug.Log("touched player");
             StartCoroutine("KillPlayer");
             isSwiping = false;
+            
         }
     }
 
@@ -136,60 +127,38 @@ public class EnemyChase : MonoBehaviour
             
             StartCoroutine("GetNewPatrolPoint");
         }
->>>>>>> Stashed changes
 
-            //if (playerDistance <= catchDistance) // if enemy catches player
-            //{
-            //    //player is dead
-            //    Debug.Log("player dead");
-            //    player.gameObject.SetActive(false);
-            //    animator.SetBool("Attack", true);
-            //    StartCoroutine("DeathSequence");
-            //}
-
-
-        }
-    }
-    void Patrol()
-    {
-        agent.SetDestination(patrolPoint[patrolIndex].position);
-        //animator.SetBool("isWalking", true);
-        if (distanceToPatrol < 1) //if enemy reaches its patrol point
+       else if (isDistracted)
         {
-            StartCoroutine(GetNewPatrolPoint());
-            // tell enemy to go to another random location
-            
-            //idle for a while
-            //walkSpeed = 0;
-
+            agent.SetDestination(distract.transform.position);
+            Debug.Log("Enemy distracted");
+            if (agent.remainingDistance < stopDistance)
+            {
+                isDistracted = false;
+            }
         }
-    }
-
-    IEnumerator DelayedSetPatrol()
-    {
-        yield return new WaitForSeconds(2);
-        Patrol();
-        GetNewPatrolPoint();
-        
-        /*GetNewPatrolPoint();
-        agent.speed = walkSpeed;
-        agent.SetDestination(patrolPoint[patrolIndex].position);
-        transitioning = false;
-        */
-    }
-
-    IEnumerator Idle()
-    {
-        yield return new WaitForSeconds(2);
-       // animator.SetFloat("Idle", true);
-        GetNewPatrolPoint();
-
     }
     IEnumerator GetNewPatrolPoint()
     {
+            
+            yield return new WaitForSeconds(1);
+            
+            patrolIndex = Random.Range(0, patrolPoint.Length);
+            agent.isStopped = false;
+            //Debug.Log("agent.remainingDistance= " + agent.remainingDistance);
+            //Debug.Log("distanceToPatrol= " + distanceToPatrol);
+            StartCoroutine("WalkToNextPoint");
+        
+    }
+
+    IEnumerator WalkToNextPoint()
+    {
         yield return new WaitForSeconds(3);
-        patrolIndex = Random.Range(0, patrolPoint.Length);
-        Debug.Log("new patrol index is " + patrolIndex);
+        
+        //Debug.Log("new target");
+        agent.speed = walkSpeed;
+       // isWalking = true;
+        animator.SetBool("isWalking", true);
     }
 
     void Chase()
@@ -222,28 +191,14 @@ public class EnemyChase : MonoBehaviour
         }
     }
 
-    //IEnumerator Wait()
-    //{
-    //    Debug.Log("waiting");
-    //    yield return new WaitForSeconds(1);
-    //    agent.SetDestination(transform.position);
-    //    walking = true;
-    //   // GetNewPatrolPoint();
-    //}
-
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectRange);
-        Debug.DrawRay(transform.position + rayCastOffset, direction);
+        Gizmos.DrawWireSphere(transform.position, catchDistance);
+        //Debug.DrawRay(transform.position + rayCastOffset, direction);
 
     }
 
-    //IEnumerator DeathSequence()
-    //{
-    //    Debug.Log("Death sequence started");
-    //    yield return new WaitForSeconds (1);
-    //    SceneManager.LoadScene("DeathScene");
-    //}
 }

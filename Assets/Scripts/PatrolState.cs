@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.AI;
 
 public class PatrolState : MonoBehaviour
-{
+{/*
     private NavMeshAgent agent;
 
     public Transform[] patrolPoints;
@@ -41,25 +41,26 @@ public class PatrolState : MonoBehaviour
         Patrol();
         //GetNewPatrolPoint();
 
-        /*GetNewPatrolPoint();
+        GetNewPatrolPoint();
         agent.speed = walkSpeed;
         agent.SetDestination(patrolPoint[patrolIndex].position);
         transitioning = false;
-        */
+        
     }
 
-    /* IEnumerator Idle()
+     IEnumerator Idle()
      {
          yield return new WaitForSeconds(2);
         // animator.SetFloat("Idle", true);
          GetNewPatrolPoint();
 
      }
-    */
+    
     IEnumerator GetNewPatrolPoint()
     {
         yield return new WaitForSeconds(3);
         patrolIndex = Random.Range(0, patrolPoint.Length);
         Debug.Log("new patrol index is " + patrolIndex);
     }
+    */
 }

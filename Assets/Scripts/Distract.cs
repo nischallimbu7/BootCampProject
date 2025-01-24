@@ -22,6 +22,7 @@ public class Distract : MonoBehaviour
         {
             Debug.Log("touched distraction");
             enemyChase.isDistracted = true;
+            enemyChase.distractLocation = transform;
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class EnemyChase : MonoBehaviour
 {
+    #region properties
     public enum State
     {
         Patrol,
@@ -15,26 +16,26 @@ public class EnemyChase : MonoBehaviour
     public State currentState;
 
     public Transform player;
-    NavMeshAgent agent;
+    public NavMeshAgent agent;
     public Transform[] patrolPoint;
     public float detectRange = 5f;
-    public int patrolIndex = 0;
-    float distanceToPatrol;
+    [SerializeField] int patrolIndex;
+    [SerializeField] float distanceToPatrol;
     public Vector3 rayCastOffset;
     public float sightDistance, catchDistance, stopDistance;
     public float chaseSpeed, walkSpeed;
     public Material material;
-    public bool isSwiping = false, isDistracted = false, isWalking;
+    public bool isSwiping = false, isDistracted = false, isWalking, hasDetected=false, isHittingPlayer, isFalling=false;
+    public Transform rayCastOrigin;
+    public Transform distractLocation;
 
     public Distract distract;
-
     public Animator animator;
-    public string DeathScene;
-    Vector3 direction;
-    Vector3 rayDirection;
+    [SerializeField] Vector3 direction;
+    [SerializeField] Vector3 rayDirection;
     public Rigidbody rb;
-
-
+    
+    #endregion 
 
     void Start()
     {
@@ -42,19 +43,22 @@ public class EnemyChase : MonoBehaviour
         animator = GetComponent<Animator>();
         agent.isStopped = false;
         rb = GetComponent<Rigidbody>();
+       
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        #region variables
+
+        #region calculated variables
         direction = (player.position - transform.position).normalized;
         rayDirection = (transform.forward).normalized;
 
         RaycastHit hit;
 
-        Debug.DrawLine(transform.position, transform.position + rayDirection * sightDistance, Color.red);
+        Debug.DrawLine(rayCastOrigin.position, rayCastOrigin.position + rayDirection * sightDistance, Color.red);
 
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
@@ -62,19 +66,16 @@ public class EnemyChase : MonoBehaviour
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
         //animator.SetFloat("Walk", agent.speed);
 
-        bool hasSeenPlayer = Physics.Raycast(transform.position, rayDirection, out hit, sightDistance);
+        bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance);
         #endregion
 
-       // Debug.Log("remainingDistance = " + agent.remainingDistance + "isStopped = " + agent.isStopped);
-        Debug.Log("agent.remainingDistance < stopDistance && !agent.isStopped = " + (agent.remainingDistance < stopDistance && !agent.isStopped));
-        
+        // Debug.Log("remainingDistance = " + agent.remainingDistance + "isStopped = " + agent.isStopped);
+       // Debug.Log("agent.remainingDistance < stopDistance && !agent.isStopped = " + (agent.remainingDistance < stopDistance && !agent.isStopped));
+
 
         if (playerDistance > detectRange && !agent.hasPath) //if player is out of range
         {
-            SetNewState(State.Patrol);
-
             Patrol();
-        
         }
         else if (hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" || playerDistance < detectRange) // if enemy sees player
         {
@@ -84,43 +85,67 @@ public class EnemyChase : MonoBehaviour
             if (playerDistance <= catchDistance && !isSwiping) // if enemy catches player
             {
                 SetNewState(State.Attack);
-                //player.gameObject.SetActive(false);
-               // animator.SetTrigger("Swiping");
+                agent.ResetPath();
+                animator.SetTrigger("Swiping");
                 isSwiping = true;
+                StartCoroutine(ResetAttack());
+            }
+            else if (playerDistance <= catchDistance &&isSwiping)
+            {
+                agent.ResetPath();
             }
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    IEnumerator ResetAttack()
     {
-        if (collision.gameObject.CompareTag("Player") && isSwiping)
+        yield return new WaitForSeconds(1);
+        isSwiping = false;
+        Debug.Log("attack reset");
+    }
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && isSwiping && isHittingPlayer)
         {
             Debug.Log("touched player");
+            StartCoroutine("KillPlayer");
             isSwiping = false;
         }
     }
-   public void Patrol()
+    IEnumerator KillPlayer()
     {
+        float attackTime = 2;
+        yield return new WaitForSeconds(attackTime);
+        if (isSwiping && isHittingPlayer)
+        {
+            Debug.Log("hit player");
+            isFalling=true;
+        }
+    }
+    public void Patrol()
+    {
+        SetNewState(State.Patrol);
         Debug.Log("Patrol called");
         agent.SetDestination(patrolPoint[patrolIndex].position);
         Debug.Log("agent.isStopped= " + agent.isStopped);
-        
-       if (agent.remainingDistance < stopDistance && !agent.isStopped) //if enemy reaches its patrol point
+
+        if (agent.remainingDistance < stopDistance && !agent.isStopped) //if enemy reaches its patrol point
         {
             Debug.Log("Enemy reached destination");
-            
-            agent.isStopped = true;
+
+            agent.isStopped = true; // causes this if statement to be exited
             agent.speed = 0;
-            
+
             //isWalking = false;
             animator.SetBool("isWalking", false);
-           // Debug.Log("isWalking = " + isWalking);
-            
+           
+            // Debug.Log("isWalking = " + isWalking);
+
             StartCoroutine("GetNewPatrolPoint");
         }
 
-       else if (isDistracted)
+        else if (isDistracted)
         {
-            agent.SetDestination(distract.transform.position);
+            agent.SetDestination(distractLocation.position);
             Debug.Log("Enemy distracted");
             if (agent.remainingDistance < stopDistance)
             {
@@ -130,39 +155,34 @@ public class EnemyChase : MonoBehaviour
     }
     IEnumerator GetNewPatrolPoint()
     {
-            
-            yield return new WaitForSeconds(1);
-            
-            patrolIndex = Random.Range(0, patrolPoint.Length);
-            agent.isStopped = false;
-            //Debug.Log("agent.remainingDistance= " + agent.remainingDistance);
-            //Debug.Log("distanceToPatrol= " + distanceToPatrol);
-            StartCoroutine("WalkToNextPoint");
-        
-    }
+        yield return new WaitForSeconds(1);
 
+        patrolIndex = Random.Range(0, patrolPoint.Length);
+        agent.isStopped = false;
+        //Debug.Log("agent.remainingDistance= " + agent.remainingDistance);
+        //Debug.Log("distanceToPatrol= " + distanceToPatrol);
+        StartCoroutine("WalkToNextPoint");
+
+    }
     IEnumerator WalkToNextPoint()
     {
         yield return new WaitForSeconds(3);
-        
+
         //Debug.Log("new target");
         agent.speed = walkSpeed;
-       // isWalking = true;
+        // isWalking = true;
         animator.SetBool("isWalking", true);
+        audioSource.Play();
     }
-
     void Chase()
 
     {
-
         // enemy chases player
         SetNewState(State.Chase);
 
         agent.SetDestination(player.position);
         agent.speed = chaseSpeed;
-
     }
-
     private void SetNewState(State newState)
     {
         currentState = newState;
@@ -181,7 +201,6 @@ public class EnemyChase : MonoBehaviour
         }
     }
 
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -190,5 +209,4 @@ public class EnemyChase : MonoBehaviour
         //Debug.DrawRay(transform.position + rayCastOffset, direction);
 
     }
-
 }

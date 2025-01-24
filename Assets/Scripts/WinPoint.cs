@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class WinPoint : MonoBehaviour
 {
-    public EnemyChase enemyChase;
+    public GameObject gameOverCanvas;
 
+    public EnemyChase enemyChase;
+    public RigidbodyFirstPersonController rigidbodyFirstPersonController;
     public GameObject player;
     // Start is called before the first frame update
     void Start()
@@ -26,16 +29,20 @@ public class WinPoint : MonoBehaviour
         if (other.gameObject == player)
         {
            EndGame();
+
         }
     }
 
-    void EndGame()
+    public void EndGame()
     {
-        Debug.Log("player won");
+        
+        Debug.Log("game ended");
         enemyChase.enabled = false; // all enemies stop moving
-        // player cant move
-        // load win UI
-        //SceneManager.LoadScene(0);
+        
+        rigidbodyFirstPersonController.enabled = false;// player cant move
+        gameOverCanvas.SetActive(true);// load end game UI
+        return;
+        
     }
 }
 

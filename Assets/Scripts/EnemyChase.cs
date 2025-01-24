@@ -172,7 +172,7 @@ public class EnemyChase : MonoBehaviour
         agent.speed = walkSpeed;
         // isWalking = true;
         animator.SetBool("isWalking", true);
-        audioSource.Play();
+        //audioSource.Play();
     }
     void Chase()
 

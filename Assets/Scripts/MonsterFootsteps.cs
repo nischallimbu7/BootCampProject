@@ -10,7 +10,7 @@ public class MonsterFootsteps : MonoBehaviour
 
     public float timeBetweenClips = 5;
     
-    private int audioIndex;
+    private int audioIndex=0;
 
     // Start is called before the first frame update
     void Start()
@@ -22,17 +22,7 @@ public class MonsterFootsteps : MonoBehaviour
     void Update()
     {
         footstepsAudio.clip = clip[audioIndex];
-        if (enemyChase.agent.speed>0)
-        {
-            footstepsAudio.enabled = true;
-            Debug.Log("footstepsAudio.enabled= " + footstepsAudio.enabled);
-           // StartCoroutine(GetNewClip());
-        }
-        else
-        {
-            footstepsAudio.enabled = false;
-            Debug.Log("footstepsAudio.enabled= " + footstepsAudio.enabled);
-        }
+        
     }
 
     IEnumerator GetNewClip()
@@ -43,6 +33,19 @@ public class MonsterFootsteps : MonoBehaviour
         Debug.Log("new footstep audio: " + footstepsAudio.clip);
         //footstepsAudio.Play();
         yield return new WaitForSeconds(timeBetweenClips);
+    }
+
+    public void PlayFootstep()
+    {
+        //footstepsAudio.enabled = true;
+        Debug.Log("footstepsAudio.enabled= " + footstepsAudio.enabled);
+        footstepsAudio.PlayOneShot(clip[audioIndex]);
+    }
+
+    void StopFootstep()
+    {
+        //footstepsAudio.enabled = false;
+        Debug.Log("footstepsAudio.enabled= " + footstepsAudio.enabled);
     }
 
 }

@@ -77,7 +77,7 @@ public class EnemyChase : MonoBehaviour
         {
             Patrol();
         }
-        else if (hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" || playerDistance < detectRange) // if enemy sees player
+        else if ((hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" && hit.collider.gameObject.tag != "Door") || playerDistance < detectRange) // if enemy sees player
         {
             Debug.Log("saw player");
             Chase();

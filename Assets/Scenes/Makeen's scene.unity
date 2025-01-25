@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.16037738, g: 0.14449094, b: 0.14449094, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.2
@@ -1404,8 +1404,6 @@ MonoBehaviour:
   direction: {x: 0, y: 0, z: 0}
   rayDirection: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
-  audioSource: {fileID: 0}
-  clip: {fileID: 0}
 --- !u!1001 &94052619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3665,7 +3663,6 @@ Transform:
   m_Children:
   - {fileID: 1299445646}
   - {fileID: 1851153484}
-  - {fileID: 766702971}
   m_Father: {fileID: 1986177825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &289714104 stripped
@@ -8005,7 +8002,7 @@ GameObject:
   - component: {fileID: 766702974}
   m_Layer: 0
   m_Name: Door script
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8019,12 +8016,12 @@ Transform:
   m_GameObject: {fileID: 766702970}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.86300087, y: -0.34737062, z: -0.010000229}
+  m_LocalPosition: {x: -18.863, y: -0.37899995, z: -4.7400007}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1321661774}
-  m_Father: {fileID: 287002221}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &766702973
 MonoBehaviour:
@@ -8073,6 +8070,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   openSpeedMultiplier: 2
   doorOpenAngle: 90
+  open: 0
 --- !u!136 &766702974
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8092,10 +8090,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.6806984
-  m_Height: 3.48
+  m_Radius: 2.5323822
+  m_Height: 5.0647645
   m_Direction: 1
-  m_Center: {x: 0.9732666, y: 0, z: 0.23698843}
+  m_Center: {x: 0.9732666, y: 0, z: -0.18539405}
 --- !u!1001 &768230410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14524,7 +14522,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3d7f674f5cff64cb98a9b96e293d5f13, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 29.77
+      value: -0.86
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3d7f674f5cff64cb98a9b96e293d5f13, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14532,7 +14530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3d7f674f5cff64cb98a9b96e293d5f13, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.04
+      value: -7.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3d7f674f5cff64cb98a9b96e293d5f13, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14617,6 +14615,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3d7f674f5cff64cb98a9b96e293d5f13, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1664074561}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3d7f674f5cff64cb98a9b96e293d5f13, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1664074563}
   m_SourcePrefab: {fileID: 100100000, guid: 3d7f674f5cff64cb98a9b96e293d5f13, type: 3}
 --- !u!1001 &1385573025
 PrefabInstance:
@@ -18547,13 +18548,9 @@ MonoBehaviour:
   player: {fileID: 824446094}
   agent: {fileID: 0}
   patrolPoint:
-  - {fileID: 2140381372}
-  - {fileID: 964791728}
-  - {fileID: 601229999}
-  - {fileID: 601229999}
   - {fileID: 563712832}
   detectRange: 1
-  patrolIndex: 1
+  patrolIndex: 0
   distanceToPatrol: 0
   rayCastOffset: {x: 0, y: 0, z: 0}
   sightDistance: 20
@@ -18575,8 +18572,6 @@ MonoBehaviour:
   direction: {x: 0, y: 0, z: 0}
   rayDirection: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
-  audioSource: {fileID: 0}
-  clip: {fileID: 0}
 --- !u!195 &1664074548
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -18771,7 +18766,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664074544}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 19bb208752cc8074f99ee3d2e0e918ce, type: 3}
   m_Name: 
@@ -18904,6 +18899,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1664074563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664074544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11277e49dd8e31f43999c877ade6b32f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door: {fileID: 0}
 --- !u!1001 &1664742595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25039,6 +25047,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1856269162}
+  - {fileID: 766702971}
   - {fileID: 1986177825}
   - {fileID: 829768465}
   - {fileID: 2650038370510088869}

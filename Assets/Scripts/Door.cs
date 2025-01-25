@@ -16,7 +16,7 @@ public class Door : MonoBehaviour
     public float openSpeedMultiplier = 2.0f; //Increasing this value will make the door open faster
     public float doorOpenAngle = 90.0f; //Global door open speed that will multiply the openSpeedCurve
 
-    bool open = false;
+    public bool open = false;
     bool enter = false;
 
     float defaultRotationAngle;
@@ -43,12 +43,16 @@ public class Door : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F) && enter)
         {
-            open = !open;
-            currentRotationAngle = transform.localEulerAngles.y;
-            openTime = 0;
+            OpenDoor();
         }
     }
 
+    public void OpenDoor()
+    {
+        open = !open;
+        currentRotationAngle = transform.localEulerAngles.y;
+        openTime = 0;
+    }
     // Display a simple info message when player is inside the trigger area (This is for testing purposes only so you can remove it)
     void OnGUI()
     {

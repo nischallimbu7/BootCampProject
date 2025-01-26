@@ -25,7 +25,7 @@ public class MonsterGrowl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        growlingAudio.clip = clip[audioIndex];
+      //  growlingAudio.clip = clip[audioIndex];
         // StartCoroutine("Growl");
         
             //growlingAudio.enabled = true;

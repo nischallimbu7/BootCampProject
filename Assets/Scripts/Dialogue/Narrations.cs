@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpeningNarration : MonoBehaviour
+public class Narrations : MonoBehaviour
 {
     public string[] sentences;
     public DialogueManager manager;

@@ -10,7 +10,7 @@ public class PlayerSight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+      
     }
 
     // Update is called once per frame
@@ -24,6 +24,8 @@ public class PlayerSight : MonoBehaviour
 
         if (hasSeenSomething && hit.collider.tag == "Door")
         {
+            manager.narrator = hit.collider.GetComponent<Narrations>();
+            Debug.Log(manager.narrator);
             Debug.Log("player saw the door");
             manager.ShowDialogue();
 

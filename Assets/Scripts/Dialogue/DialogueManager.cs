@@ -8,7 +8,7 @@ public class DialogueManager : MonoBehaviour
     public int chosenSentence;
     public string[] sentences;
     public Canvas dialogueCanvas;
-    public OpeningNarration narrator;
+    public Narrations narrator;
     // Start is called before the first frame update
     void Start()
     {

@@ -42,7 +42,7 @@ public class MonsterGrowl : MonoBehaviour
         //yield return new WaitForSeconds(timeBetweenClips);
         audioIndex=Random.Range(0, clip.Length);
        // isGrowling = true;
-        Debug.Log("new audio played: " + growlingAudio.clip);
+        //Debug.Log("new audio played: " + growlingAudio.clip);
         //audioSource.Play();
         growlingAudio.PlayOneShot(clip[audioIndex]);
     }

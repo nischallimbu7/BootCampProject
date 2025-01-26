@@ -30,7 +30,7 @@ public class MonsterFootsteps : MonoBehaviour
        
        // audioSource.PlayOneShot(clip[audioIndex]);
         audioIndex = Random.Range(0, clip.Length);
-        Debug.Log("new footstep audio: " + footstepsAudio.clip);
+       // Debug.Log("new footstep audio: " + footstepsAudio.clip);
         //footstepsAudio.Play();
         
     }
@@ -38,7 +38,7 @@ public class MonsterFootsteps : MonoBehaviour
     public void PlayFootstep()
     {
         //footstepsAudio.enabled = true;
-        Debug.Log("footstepsAudio.enabled= " + footstepsAudio.enabled);
+        //Debug.Log("footstepsAudio.enabled= " + footstepsAudio.enabled);
         footstepsAudio.PlayOneShot(clip[audioIndex]);
     }
 

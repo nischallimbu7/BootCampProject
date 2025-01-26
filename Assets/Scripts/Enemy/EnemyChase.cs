@@ -61,7 +61,7 @@ public class EnemyChase : MonoBehaviour
 
         RaycastHit hit;
 
-        Debug.DrawLine(rayCastOrigin.position, rayCastOrigin.position + rayDirection * sightDistance, Color.red);
+        
 
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
@@ -70,10 +70,11 @@ public class EnemyChase : MonoBehaviour
         //animator.SetFloat("Walk", agent.speed);
 
         bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance);
+        Debug.DrawLine(rayCastOrigin.position, rayCastOrigin.position + rayDirection * sightDistance, Color.red);
         #endregion
 
         // Debug.Log("remainingDistance = " + agent.remainingDistance + "isStopped = " + agent.isStopped);
-       // Debug.Log("agent.remainingDistance < stopDistance && !agent.isStopped = " + (agent.remainingDistance < stopDistance && !agent.isStopped));
+        // Debug.Log("agent.remainingDistance < stopDistance && !agent.isStopped = " + (agent.remainingDistance < stopDistance && !agent.isStopped));
 
 
         if (playerDistance > detectRange && !agent.hasPath) //if player is out of range
@@ -82,7 +83,7 @@ public class EnemyChase : MonoBehaviour
         }
         else if ((hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" && hit.collider.gameObject.tag != "Door") || playerDistance < detectRange || hasDetected) // if enemy sees player
         {
-            Debug.Log("saw player");
+            //Debug.Log("saw player");
             Chase();
 
             if (playerDistance <= catchDistance && !isSwiping) // if enemy catches player
@@ -127,13 +128,13 @@ public class EnemyChase : MonoBehaviour
     public void Patrol()
     {
         SetNewState(State.Patrol);
-        Debug.Log("Patrol called");
+       // Debug.Log("Patrol called");
         agent.SetDestination(patrolPoint[patrolIndex].position);
-        Debug.Log("agent.isStopped= " + agent.isStopped);
+        //Debug.Log("agent.isStopped= " + agent.isStopped);
 
         if (agent.remainingDistance < stopDistance && !agent.isStopped) //if enemy reaches its patrol point
         {
-            Debug.Log("Enemy reached destination");
+         //   Debug.Log("Enemy reached destination");
 
             agent.isStopped = true; // causes this if statement to be exited
             agent.speed = 0;
@@ -206,9 +207,11 @@ public class EnemyChase : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectRange);
         Gizmos.DrawWireSphere(transform.position, catchDistance);
+        
         //Debug.DrawRay(transform.position + rayCastOffset, direction);
 
     }

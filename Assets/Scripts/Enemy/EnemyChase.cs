@@ -22,7 +22,7 @@ public class EnemyChase : MonoBehaviour
     [SerializeField] int patrolIndex;
     [SerializeField] float distanceToPatrol;
     
-    public float sightDistance, catchDistance, stopDistance;
+    public float sightDistance, catchDistance, stopDistance, attackTime;
     public float chaseSpeed, walkSpeed;
     public Material material;
     public bool isSwiping = false, isDistracted = false, isWalking, hasDetected=false, isHittingPlayer, isFalling=false;
@@ -31,6 +31,7 @@ public class EnemyChase : MonoBehaviour
     public Vector3 rayCastOffset;
     [SerializeField] Vector3 direction;
     [SerializeField] Vector3 rayDirection;
+    public LayerMask playerMask;
 
 
     public Distract distract;
@@ -60,16 +61,15 @@ public class EnemyChase : MonoBehaviour
         rayDirection = (transform.forward).normalized;
 
         RaycastHit hit;
-
         
-
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
         // distance between enemy and target location
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
         //animator.SetFloat("Walk", agent.speed);
 
-        bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance);
+        bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance, playerMask);
+        
         Debug.DrawLine(rayCastOrigin.position, rayCastOrigin.position + rayDirection * sightDistance, Color.red);
         #endregion
 
@@ -81,8 +81,9 @@ public class EnemyChase : MonoBehaviour
         {
             Patrol();
         }
-        else if ((hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" && hit.collider.gameObject.tag != "Door") || playerDistance < detectRange || hasDetected) // if enemy sees player
+        else if ((hasSeenPlayer ) || playerDistance < detectRange || hasDetected) // if enemy sees player
         {
+            // && hit.collider.gameObject.tag != "Untagged" && hit.collider.gameObject.tag != "Door"
             //Debug.Log("saw player");
             Chase();
 
@@ -117,7 +118,7 @@ public class EnemyChase : MonoBehaviour
     }
     IEnumerator KillPlayer()
     {
-        float attackTime = 2;
+         
         yield return new WaitForSeconds(attackTime);
         if (isSwiping && isHittingPlayer)
         {

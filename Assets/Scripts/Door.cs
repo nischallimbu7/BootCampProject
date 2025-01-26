@@ -43,11 +43,11 @@ public class Door : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F) && enter)
         {
-            OpenDoor();
+            RotateDoor();
         }
     }
 
-    public void OpenDoor()
+    public void RotateDoor()
     {
         open = !open;
         currentRotationAngle = transform.localEulerAngles.y;

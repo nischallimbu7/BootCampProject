@@ -21,18 +21,21 @@ public class EnemyChase : MonoBehaviour
     public float detectRange = 5f;
     [SerializeField] int patrolIndex;
     [SerializeField] float distanceToPatrol;
-    public Vector3 rayCastOffset;
+    
     public float sightDistance, catchDistance, stopDistance;
     public float chaseSpeed, walkSpeed;
     public Material material;
     public bool isSwiping = false, isDistracted = false, isWalking, hasDetected=false, isHittingPlayer, isFalling=false;
     public Transform rayCastOrigin;
     public Transform distractLocation;
+    public Vector3 rayCastOffset;
+    [SerializeField] Vector3 direction;
+    [SerializeField] Vector3 rayDirection;
+
 
     public Distract distract;
     public Animator animator;
-    [SerializeField] Vector3 direction;
-    [SerializeField] Vector3 rayDirection;
+ 
     public Rigidbody rb;
     
     #endregion 
@@ -62,7 +65,7 @@ public class EnemyChase : MonoBehaviour
 
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
-        // distance between enemy and random location
+        // distance between enemy and target location
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
         //animator.SetFloat("Walk", agent.speed);
 

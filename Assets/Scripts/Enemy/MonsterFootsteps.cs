@@ -8,7 +8,7 @@ public class MonsterFootsteps : MonoBehaviour
     public AudioSource footstepsAudio;
     public AudioClip[] clip;
 
-    public float timeBetweenClips = 5;
+    //public float timeBetweenClips = 5;
     
     private int audioIndex=0;
 
@@ -25,14 +25,14 @@ public class MonsterFootsteps : MonoBehaviour
         
     }
 
-    IEnumerator GetNewClip()
+    void GetNewClip()
     {
-        yield return new WaitForSeconds(timeBetweenClips);
+       
        // audioSource.PlayOneShot(clip[audioIndex]);
         audioIndex = Random.Range(0, clip.Length);
         Debug.Log("new footstep audio: " + footstepsAudio.clip);
         //footstepsAudio.Play();
-        yield return new WaitForSeconds(timeBetweenClips);
+        
     }
 
     public void PlayFootstep()
@@ -42,10 +42,6 @@ public class MonsterFootsteps : MonoBehaviour
         footstepsAudio.PlayOneShot(clip[audioIndex]);
     }
 
-    void StopFootstep()
-    {
-        //footstepsAudio.enabled = false;
-        Debug.Log("footstepsAudio.enabled= " + footstepsAudio.enabled);
-    }
+   
 
 }

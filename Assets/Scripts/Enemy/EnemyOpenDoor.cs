@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyOpenDoor : MonoBehaviour
@@ -5,10 +6,7 @@ public class EnemyOpenDoor : MonoBehaviour
     
     public Door door;
 
-    private void Update()
-    {
-        Debug.Log("!door.open= " + door.open);
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
 
@@ -18,14 +16,25 @@ public class EnemyOpenDoor : MonoBehaviour
             Debug.Log("touched door");
             if (!door.open)
          {
-                door.OpenDoor();
+                door.RotateDoor();
          }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        door.OpenDoor();
+        if (other.gameObject.CompareTag("Door"))
+        {
+            if (door.open)
+            {
+                StartCoroutine(CloseDoor());
+            }
+        }
+    }
+    IEnumerator CloseDoor()
+    {
+        yield return new WaitForSeconds(3);
+        door.RotateDoor();
     }
 
 }

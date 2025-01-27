@@ -1,4 +1,3 @@
-using System.Net;
 using UnityEngine;
 
 public class Distract : MonoBehaviour
@@ -9,9 +8,12 @@ public class Distract : MonoBehaviour
     float distanceToTarget;
     public DialogueManager manager;
 
+    public AudioSource audioSource;
+    public AudioClip clip;
     void Start()
     {
-        rb = GetComponentInParent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         
     }
     private void FixedUpdate()
@@ -27,8 +29,8 @@ public class Distract : MonoBehaviour
             Debug.Log("touched distraction, monster is close enough to hear");
             enemyChase.isDistracted = true;
             enemyChase.distractLocation = transform;
-            rb.AddForce(Vector3.forward *100,ForceMode.Impulse);
-            
+            //rb.AddForce(Vector3.forward *100,ForceMode.Impulse);
+            audioSource.PlayOneShot(clip);
 
         }
         else if (collision.gameObject.CompareTag("Player") && distanceToTarget > noiseRange)

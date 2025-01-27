@@ -22,7 +22,7 @@ public class PlayerSight : MonoBehaviour
         
         Debug.DrawLine(origin.transform.position, (origin.transform.position + rayDirection) *sightDistance, Color.blue);
 
-        if (hasSeenSomething && hit.collider.tag == "Door")
+        if (hasSeenSomething && hit.collider.tag == "Interactable")
         {
             manager.narrator = hit.collider.GetComponent<Narrations>();
             Debug.Log(manager.narrator);

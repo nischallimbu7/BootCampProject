@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MazeGenerator : MonoBehaviour
 {
+    public NavMeshSurface surface;
     public GameObject floorPrefab;
     public GameObject wallPrefab;
     public int width = 100;
@@ -19,6 +22,7 @@ public class MazeGenerator : MonoBehaviour
     {
         GenerateMaze();
         BuildMaze();
+        surface.BuildNavMesh();
     }
 
     void GenerateMaze()
@@ -33,6 +37,8 @@ public class MazeGenerator : MonoBehaviour
                 maze[x, y] = 1; // 
             }
         }
+        
+        CreateRooms();
 
         // Start carving the maze from a random position
         int startX = 1;
@@ -40,6 +46,33 @@ public class MazeGenerator : MonoBehaviour
 
         Carve(startX, startY);
     }
+    public int minRooms = 1; // Minimum number of rooms
+    public int maxRooms = 3; // Maximum number of rooms
+
+    void CreateRooms()
+    {
+        // Randomize the number of rooms within the specified range
+        int numberOfRooms = Random.Range(minRooms, maxRooms + 1); // Inclusive range
+
+        for (int i = 0; i < numberOfRooms; i++)
+        {
+            // Randomize room dimensions and position
+            int roomWidth = Random.Range(2, 4); // Random width (minimum 3 tiles)
+            int roomHeight = Random.Range(2, 6); // Random height (minimum 3 tiles)
+            int roomX = Random.Range(1, width - roomWidth - 1); // Ensure room fits in the maze
+            int roomY = Random.Range(1, height - roomHeight - 1);
+
+            // Carve out the room (set cells to 0)
+            for (int x = roomX; x < roomX + roomWidth; x++)
+            {
+                for (int y = roomY; y < roomY + roomHeight; y++)
+                {
+                    maze[x, y] = 0; // 0 = floor
+                }
+            }
+        }
+    }
+
 
     void Carve(int x, int y)
     {
@@ -71,60 +104,93 @@ public class MazeGenerator : MonoBehaviour
     }
 
     void BuildMaze()
-{
-    // First, create the floors at Y = 0
-    for (int x = 0; x < width; x++)
     {
-        for (int y = 0; y < height; y++)
+        // First, create the floors at Y = 0
+        for (int x = 0; x < width; x++)
         {
-            Vector3 floorPosition = new Vector3(x * floorSize, 0, y * floorSize);
-            if (maze[x, y] == 0)
+            for (int y = 0; y < height; y++)
             {
-                // Place floor at Y = 0
-                Instantiate(floorPrefab, floorPosition, Quaternion.identity, transform);
+                Vector3 floorPosition = new Vector3(x * floorSize, 0, y * floorSize);
+                if (maze[x, y] == 0)
+                {
+                    // Place floor at Y = 0
+                    Instantiate(floorPrefab, floorPosition, Quaternion.identity, transform);
+                }
             }
         }
-    }
 
-    // Then, create the walls at Y = 0 (aligned with the floor)
-    for (int x = 0; x < width; x++)
-    {
-        for (int y = 0; y < height; y++)
+        // Then, create the walls at Y = 0 (aligned with the floor)
+        for (int x = 0; x < width; x++)
         {
-            // Only create walls for cells marked as walls (1)
-            if (maze[x, y] == 1)
+            for (int y = 0; y < height; y++)
             {
-                 // Create left wall if left neighbor is not a floor and right neighbor is a floor
-                if ((x == 0 || maze[x - 1, y] == 0) && (x < width - 1 && maze[x + 1, y] == 0)) // Left not floor, Right is floor
+
+                if (maze[x, y] == 0) // Only check for walls around floors
+            {
+                // Create a wall on the left side if the left neighbor is not a floor
+                if (x == 0 || maze[x - 1, y] == 1)
                 {
-                    Vector3 leftWallPosition = new Vector3(x , 0, y * floorSize); 
-                    Instantiate(wallPrefab, leftWallPosition, Quaternion.Euler(0, 90, 0), transform); // Rotate to face left
+                    Vector3 leftWallPosition = new Vector3((x * floorSize - floorSize / 2)-4, 2, (y * floorSize)+2);
+                    Instantiate(wallPrefab, leftWallPosition, Quaternion.identity, transform); // No rotation
                 }
 
-                // Create right wall if right neighbor is not a floor and left neighbor is a floor
-                if ((x == width - 1 || maze[x + 1, y] == 0) && (x > 0 && maze[x - 1, y] == 0)) // Right not floor, Left is floor
+                // Create a wall on the right side if the right neighbor is not a floor
+                if (x == width - 1 || maze[x + 1, y] == 1)
                 {
-                    Vector3 rightWallPosition = new Vector3((x * floorSize)-4, 0, y * floorSize + 4);
-                    Instantiate(wallPrefab, rightWallPosition, Quaternion.Euler(0, -90, 0), transform); // Rotate to face right
+                    Vector3 rightWallPosition = new Vector3((x * floorSize + floorSize / 2), 2, (y * floorSize)+2);
+                    Instantiate(wallPrefab, rightWallPosition, Quaternion.identity, transform); // No rotation
+                }
+                
+    
+                // Create a wall at the front (top side) if the top neighbor is not a floor
+                if (y == height - 1 || maze[x, y + 1] == 1)
+                {
+                    Vector3 frontWallPosition = new Vector3((x * floorSize)-2, 2, (y * floorSize + floorSize / 2)+4);
+                    Instantiate(wallPrefab, frontWallPosition, Quaternion.identity, transform); // No rotation
                 }
 
-           /*     // Front wall (facing forward/up)
-                if (y == height - 1 || maze[x, y + 1] == 0) // Only create if upward neighbor is a floor
+                // Create a wall at the back (bottom side) if the bottom neighbor is not a floor
+                if (y == 0 || maze[x, y - 1] == 1)
                 {
-                    Vector3 frontWallPosition = new Vector3(x * floorSize, 0, y * floorSize + (floorSize / 2));
-                    Instantiate(wallPrefab, frontWallPosition, Quaternion.Euler(0, 0, 0), transform); // No rotation for front wall
+                    Vector3 backWallPosition = new Vector3((x * floorSize)-2, 2, (y * floorSize - floorSize / 2));
+                    Instantiate(wallPrefab, backWallPosition, Quaternion.identity, transform); // No rotation
                 }
-
-                // Back wall (facing downward)
-                if (y == 0 || maze[x, y - 1] == 0) // Only create if downward neighbor is a floor
+            }
+                /*// Only create walls for cells marked as walls (1)
+                if (maze[x, y] == 1)
                 {
-                    Vector3 backWallPosition = new Vector3(x * floorSize, 0, y * floorSize - (floorSize / 2));
-                    Instantiate(wallPrefab, backWallPosition, Quaternion.Euler(0, 0, 0), transform); // No rotation for back wall
+                    
+                    // Create left wall if left neighbor is not a floor and right neighbor is a floor
+                    if ((x == 0 || maze[x - 1, y] == 0) && (x < width - 1 && maze[x + 1, y] == 0)) // Left not floor, Right is floor
+                    {
+                        Vector3 leftWallPosition = new Vector3(x, 0, y * floorSize);
+                        Instantiate(wallPrefab, leftWallPosition, Quaternion.Euler(0, 90, 0), transform); // Rotate to face left
+                    }
+
+                    // Create right wall if right neighbor is not a floor and left neighbor is a floor
+                    if ((x == width - 1 || maze[x + 1, y] == 0) && (x > 0 && maze[x - 1, y] == 0)) // Right not floor, Left is floor
+                    {
+                        Vector3 rightWallPosition = new Vector3((x * floorSize) - 4, 0, y * floorSize + 4);
+                        Instantiate(wallPrefab, rightWallPosition, Quaternion.Euler(0, -90, 0), transform); // Rotate to face right
+                    }
+
+                        // Front wall (facing forward/up)
+                         if (y == height - 1 || maze[x, y + 1] == 0) // Only create if upward neighbor is a floor
+                         {
+                             Vector3 frontWallPosition = new Vector3(x * floorSize, 0, y * floorSize + (floorSize / 2));
+                             Instantiate(wallPrefab, frontWallPosition, Quaternion.Euler(0, 0, 0), transform); // No rotation for front wall
+                         }
+
+                         // Back wall (facing downward)
+                         if (y == 0 || maze[x, y - 1] == 0) // Only create if downward neighbor is a floor
+                         {
+                             Vector3 backWallPosition = new Vector3(x * floorSize, 0, y * floorSize - (floorSize / 2));
+                             Instantiate(wallPrefab, backWallPosition, Quaternion.Euler(0, 0, 0), transform); // No rotation for back wall
+                         }
                 }*/
             }
         }
     }
-}
 
 
 }

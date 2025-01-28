@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Fuel
   - Door
+  - Interactable
   layers:
   - Default
   - TransparentFX

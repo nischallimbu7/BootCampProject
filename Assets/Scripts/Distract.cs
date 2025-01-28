@@ -37,11 +37,11 @@ public class Distract : MonoBehaviour
             Debug.Log("touched distraction but monster is too far away to hear");
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, noiseRange); //yellow sphere
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, distanceToTarget); //white sphere
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position, noiseRange); //yellow sphere
+    //    Gizmos.color = Color.white;
+    //    Gizmos.DrawWireSphere(transform.position, distanceToTarget); //white sphere
+    //}
 }

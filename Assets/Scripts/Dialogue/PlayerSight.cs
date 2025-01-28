@@ -20,7 +20,7 @@ public class PlayerSight : MonoBehaviour
         Vector3 rayDirection = origin.transform.forward;
         bool hasSeenSomething = Physics.Raycast(origin.transform.position, rayDirection, out hit, sightDistance);
         
-        Debug.DrawLine(origin.transform.position, (origin.transform.position + rayDirection) *sightDistance, Color.blue);
+        //Debug.DrawLine(origin.transform.position, (origin.transform.position + rayDirection) *sightDistance, Color.blue);
 
         if (hasSeenSomething && hit.collider.tag == "Interactable")
         {

@@ -23,7 +23,7 @@ public class EnemyChase : MonoBehaviour
     
     public float sightDistance, catchDistance, stopDistance, attackTime;
     public float chaseSpeed, walkSpeed;
-    public Material material;
+    
     public bool isSwiping = false, isDistracted = false, isWalking, hasDetected=false, isHittingPlayer, isFalling=false;
     public Transform rayCastOrigin;
     public Transform distractLocation;
@@ -35,10 +35,10 @@ public class EnemyChase : MonoBehaviour
 
     public Distract distract;
     public Animator animator;
- 
     public Rigidbody rb;
-    
-    #endregion 
+    //public Material material;
+
+    #endregion
 
     void Start()
     {
@@ -88,7 +88,7 @@ public class EnemyChase : MonoBehaviour
 
             if (playerDistance <= catchDistance && !isSwiping) // if enemy catches player
             {
-                SetNewState(State.Attack);
+               // SetNewState(State.Attack);
                 agent.ResetPath();
                 animator.SetTrigger("Swiping");
                 isSwiping = true;
@@ -127,7 +127,7 @@ public class EnemyChase : MonoBehaviour
     }
     public void Patrol()
     {
-        SetNewState(State.Patrol);
+        //SetNewState(State.Patrol);
        // Debug.Log("Patrol called");
         agent.SetDestination(patrolPoint[patrolIndex].position);
         //Debug.Log("agent.isStopped= " + agent.isStopped);
@@ -182,28 +182,28 @@ public class EnemyChase : MonoBehaviour
 
     {
         // enemy chases player
-        SetNewState(State.Chase);
+        //SetNewState(State.Chase);
 
         agent.SetDestination(player.position);
         agent.speed = chaseSpeed;
     }
-    private void SetNewState(State newState)
-    {
-        currentState = newState;
+    //private void SetNewState(State newState)
+    //{
+    //    currentState = newState;
 
-        switch (currentState)
-        {
-            case State.Patrol:
-                material.color = Color.yellow;
-                break;
-            case State.Chase:
-                material.color = Color.blue;
-                break;
-            case State.Attack:
-                material.color = Color.red;
-                break;
-        }
-    }
+    //    switch (currentState)
+    //    {
+    //        case State.Patrol:
+    //            material.color = Color.yellow;
+    //            break;
+    //        case State.Chase:
+    //            material.color = Color.blue;
+    //            break;
+    //        case State.Attack:
+    //            material.color = Color.red;
+    //            break;
+    //    }
+    //}
 
     private void OnDrawGizmos()
     {

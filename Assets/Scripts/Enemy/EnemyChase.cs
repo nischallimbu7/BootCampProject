@@ -18,7 +18,7 @@ public class EnemyChase : MonoBehaviour
     public NavMeshAgent agent;
     public Transform[] patrolPoint;
     public float detectRange = 5f;
-    [SerializeField] int patrolIndex;
+     int patrolIndex;
     [SerializeField] float distanceToPatrol;
     
     public float sightDistance, catchDistance, stopDistance, attackTime;
@@ -46,6 +46,7 @@ public class EnemyChase : MonoBehaviour
         animator = GetComponent<Animator>();
         agent.isStopped = false;
         rb = GetComponent<Rigidbody>();
+        player = GameObject.Find("player").transform;
        
         
     }

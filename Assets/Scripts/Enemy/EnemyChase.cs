@@ -69,7 +69,8 @@ public class EnemyChase : MonoBehaviour
         //animator.SetFloat("Walk", agent.speed);
 
         bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance, playerMask);
-        
+        Debug.Log("hasSeenPlayer= " + hasSeenPlayer);
+        Debug.Log(hasSeenPlayer && hit.collider.gameObject.CompareTag("Player"));
         Debug.DrawLine(rayCastOrigin.position, rayCastOrigin.position + rayDirection * sightDistance, Color.red);
         #endregion
 
@@ -81,10 +82,11 @@ public class EnemyChase : MonoBehaviour
         {
             Patrol();
         }
-        else if ((hasSeenPlayer ) || playerDistance < detectRange || hasDetected) // if enemy sees player
+        else if (hasSeenPlayer && hit.collider.gameObject.tag != "Untagged" && hit.collider.gameObject.tag != "Door" || playerDistance < detectRange || hasDetected) // if enemy sees player
         {
-            // && hit.collider.gameObject.tag != "Untagged" && hit.collider.gameObject.tag != "Door"
-            //Debug.Log("saw player");
+            
+
+            Debug.Log("saw player");
             Chase();
 
             if (playerDistance <= catchDistance && !isSwiping) // if enemy catches player

@@ -37,10 +37,10 @@ public class DetectRange : MonoBehaviour
                 Debug.Log("Detected player with collision box");
             }
 
-            else if (Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, wallLayer))
-            {
-                Debug.Log("didnt see player"); return;
-            }
+            //else if (Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, wallLayer))
+            //{
+            //    Debug.Log("didnt see player"); return;
+            //}
         }
     }
 

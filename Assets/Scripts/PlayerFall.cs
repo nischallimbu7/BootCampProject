@@ -42,7 +42,7 @@ public class PlayerFall : MonoBehaviour
 
         IEnumerator KillCam()
         {
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(2);
             playerCam.enabled = false;
             enemyCam.gameObject.SetActive(true);
 

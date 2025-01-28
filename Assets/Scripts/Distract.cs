@@ -14,7 +14,7 @@ public class Distract : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
-        
+
     }
     private void FixedUpdate()
     {
@@ -22,7 +22,7 @@ public class Distract : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        
+
 
         if (collision.gameObject.CompareTag("Player") && distanceToTarget < noiseRange) // if white sphere is smaller than yellow sphere
         {

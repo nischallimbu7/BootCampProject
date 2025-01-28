@@ -6,7 +6,7 @@ public class HitBox : MonoBehaviour
 {
     public EnemyChase enemyChase;
     // Start is called before the first frame update
-  
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,13 +18,13 @@ public class HitBox : MonoBehaviour
         }
     }
 
-    
+
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-           // StartCoroutine(ResetHitBox()); 
+            // StartCoroutine(ResetHitBox()); 
         }
     }
 

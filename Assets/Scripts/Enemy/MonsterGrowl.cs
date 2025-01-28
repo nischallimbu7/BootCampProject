@@ -4,7 +4,7 @@ public class MonsterGrowl : MonoBehaviour
 {
     public AudioSource growlingAudio;
     public AudioClip[] clip;
-    private float timeBetweenClips=4;
+    private float timeBetweenClips = 4;
     bool isGrowling;
     private int audioIndex;
     public EnemyChase enemyChase;
@@ -24,23 +24,23 @@ public class MonsterGrowl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      //  growlingAudio.clip = clip[audioIndex];
+        //  growlingAudio.clip = clip[audioIndex];
         // StartCoroutine("Growl");
-        
-            //growlingAudio.enabled = true;
-            
-           // StartCoroutine(GetNewClip());
-       
-        
-        
+
+        //growlingAudio.enabled = true;
+
+        // StartCoroutine(GetNewClip());
+
+
+
     }
 
-  
-   void  GetNewClip()
+
+    void GetNewClip()
     {
         //yield return new WaitForSeconds(timeBetweenClips);
-        audioIndex=Random.Range(0, clip.Length);
-       // isGrowling = true;
+        audioIndex = Random.Range(0, clip.Length);
+        // isGrowling = true;
         //Debug.Log("new audio played: " + growlingAudio.clip);
         //audioSource.Play();
         growlingAudio.PlayOneShot(clip[audioIndex]);

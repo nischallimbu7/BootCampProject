@@ -6,7 +6,7 @@ public class AnimateEnemy : MonoBehaviour
 {
     public Animator animator;
     public EnemyChase enemyChase;
-    
+
     // Start is called before the first frame update
     void Start()
     {

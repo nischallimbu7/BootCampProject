@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class EnemyOpenDoor : MonoBehaviour
 {
-    
+
     public Door door;
 
-    
+
     private void OnTriggerEnter(Collider other)
     {
 
@@ -15,9 +15,9 @@ public class EnemyOpenDoor : MonoBehaviour
             door = other.gameObject.GetComponent<Door>();
             Debug.Log("touched door");
             if (!door.open)
-         {
+            {
                 door.RotateDoor();
-         }
+            }
         }
     }
 

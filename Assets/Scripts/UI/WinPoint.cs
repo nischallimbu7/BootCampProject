@@ -16,35 +16,35 @@ public class WinPoint : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-     rigidbodyFirstPersonController = player.GetComponent<RigidbodyFirstPersonController>();   
+        rigidbodyFirstPersonController = player.GetComponent<RigidbodyFirstPersonController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == player)
         {
-           EndGame();
+            EndGame();
 
         }
     }
 
     public void EndGame()
     {
-        
+
         Debug.Log("game ended");
         enemyChase.enabled = false; // all enemies stop moving
-        
+
         rigidbodyFirstPersonController.enabled = false;// player cant move
         gameOverCanvas.SetActive(true);// load end game UI
         lanternPhysics.isKinematic = false;
         return;
-        
+
     }
 }
 

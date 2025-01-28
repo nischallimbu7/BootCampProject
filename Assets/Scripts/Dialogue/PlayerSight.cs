@@ -10,7 +10,7 @@ public class PlayerSight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      
+
     }
 
     // Update is called once per frame
@@ -19,8 +19,8 @@ public class PlayerSight : MonoBehaviour
         RaycastHit hit;
         Vector3 rayDirection = origin.transform.forward;
         bool hasSeenSomething = Physics.Raycast(origin.transform.position, rayDirection, out hit, sightDistance);
-        
-        Debug.DrawLine(origin.transform.position, (origin.transform.position + rayDirection) *sightDistance, Color.blue);
+
+        Debug.DrawLine(origin.transform.position, (origin.transform.position + rayDirection) * sightDistance, Color.blue);
 
         if (hasSeenSomething && hit.collider.tag == "Interactable")
         {

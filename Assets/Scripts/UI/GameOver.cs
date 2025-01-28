@@ -11,16 +11,16 @@ public class GameOver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-       if (enemyChase.isFalling)
+        if (enemyChase.isFalling)
         {
             StartCoroutine("EndGame");
-            
+
         }
     }
 
@@ -29,6 +29,6 @@ public class GameOver : MonoBehaviour
         yield return new WaitForSeconds(5);
         winPoint.EndGame();
         gameOverText.text = "You have been killed";
-        
+
     }
 }

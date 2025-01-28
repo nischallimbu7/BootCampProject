@@ -10,7 +10,7 @@ public class DetectRange : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             enemyChase.hasDetected = true;
             Debug.Log("Detected player with collision box");

@@ -7,30 +7,30 @@ public class MonsterFootsteps : MonoBehaviour
     public AudioClip[] clip;
 
     //public float timeBetweenClips = 5;
-    
-    private int audioIndex=0;
+
+    private int audioIndex = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-       
+
     }
 
     // Update is called once per frame
     void Update()
     {
         footstepsAudio.clip = clip[audioIndex];
-        
+
     }
 
     void GetNewClip()
     {
-       
-       // audioSource.PlayOneShot(clip[audioIndex]);
+
+        // audioSource.PlayOneShot(clip[audioIndex]);
         audioIndex = Random.Range(0, clip.Length);
-       // Debug.Log("new footstep audio: " + footstepsAudio.clip);
+        // Debug.Log("new footstep audio: " + footstepsAudio.clip);
         //footstepsAudio.Play();
-        
+
     }
 
     public void PlayFootstep()
@@ -40,6 +40,6 @@ public class MonsterFootsteps : MonoBehaviour
         footstepsAudio.PlayOneShot(clip[audioIndex]);
     }
 
-   
+
 
 }

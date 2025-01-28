@@ -4,10 +4,10 @@ using UnityEngine;
 namespace UnityStandardAssets.ImageEffects
 {
     [ExecuteInEditMode]
-    [RequireComponent (typeof(Camera))]
-    [AddComponentMenu ("Image Effects/Displacement/Fisheye")]
+    [RequireComponent(typeof(Camera))]
+    [AddComponentMenu("Image Effects/Displacement/Fisheye")]
     public class Fisheye : PostEffectsBase
-	{
+    {
         public float strengthX = 0.05f;
         public float strengthY = 0.05f;
 
@@ -16,22 +16,22 @@ namespace UnityStandardAssets.ImageEffects
 
         [Obsolete]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
-        public override bool CheckResources ()
+        public override bool CheckResources()
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
-		{
-            CheckSupport (false);
-            fisheyeMaterial = CheckShaderAndCreateMaterial(fishEyeShader,fisheyeMaterial);
+        {
+            CheckSupport(false);
+            fisheyeMaterial = CheckShaderAndCreateMaterial(fishEyeShader, fisheyeMaterial);
 
             if (!isSupported)
-                ReportAutoDisable ();
+                ReportAutoDisable();
             return isSupported;
         }
 
-        void OnRenderImage (RenderTexture source, RenderTexture destination)
-		{
-            if (CheckResources()==false)
-			{
-                Graphics.Blit (source, destination);
+        void OnRenderImage(RenderTexture source, RenderTexture destination)
+        {
+            if (CheckResources() == false)
+            {
+                Graphics.Blit(source, destination);
                 return;
             }
 
@@ -39,8 +39,8 @@ namespace UnityStandardAssets.ImageEffects
 
             float ar = (source.width * 1.0f) / (source.height * 1.0f);
 
-            fisheyeMaterial.SetVector ("intensity", new Vector4 (strengthX * ar * oneOverBaseSize, strengthY * oneOverBaseSize, strengthX * ar * oneOverBaseSize, strengthY * oneOverBaseSize));
-            Graphics.Blit (source, destination, fisheyeMaterial);
+            fisheyeMaterial.SetVector("intensity", new Vector4(strengthX * ar * oneOverBaseSize, strengthY * oneOverBaseSize, strengthX * ar * oneOverBaseSize, strengthY * oneOverBaseSize));
+            Graphics.Blit(source, destination, fisheyeMaterial);
         }
     }
 }

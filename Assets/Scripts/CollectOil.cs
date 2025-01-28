@@ -3,14 +3,14 @@ using UnityEngine;
 public class CollectOil : MonoBehaviour
 {
     public LampLight lampLight;
-    private bool isTouchingFuel=false, collectedFuel=false;
-    
+    private bool isTouchingFuel = false, collectedFuel = false;
+
     public void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Fuel"))
         {
             isTouchingFuel = true;
-            
+
             if (collectedFuel)
             {
                 Destroy(other.gameObject);
@@ -30,16 +30,16 @@ public class CollectOil : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) &&isTouchingFuel)
+        if (Input.GetKeyDown(KeyCode.F) && isTouchingFuel)
         {
             collectedFuel = true;
         }
-        
+
     }
     void OnGUI()
     {
         if (isTouchingFuel)
             GUI.Label(new Rect(Screen.width / 2 - 75, Screen.height - 100, 200, 30), "Press 'F' to refill your lantern");
-        
+
     }
 }

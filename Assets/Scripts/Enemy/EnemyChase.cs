@@ -20,11 +20,11 @@ public class EnemyChase : MonoBehaviour
     public float detectRange = 5f;
     [SerializeField] int patrolIndex;
     [SerializeField] float distanceToPatrol;
-    
+
     public float sightDistance, catchDistance, stopDistance, attackTime;
     public float chaseSpeed, walkSpeed;
     public Material material;
-    public bool isSwiping = false, isDistracted = false, isWalking, hasDetected=false, isHittingPlayer, isFalling=false;
+    public bool isSwiping = false, isDistracted = false, isWalking, hasDetected = false, isHittingPlayer, isFalling = false;
     public Transform rayCastOrigin;
     public Transform distractLocation;
     public Vector3 rayCastOffset;
@@ -35,10 +35,10 @@ public class EnemyChase : MonoBehaviour
 
     public Distract distract;
     public Animator animator;
- 
+
     public Rigidbody rb;
-    
-    #endregion 
+
+    #endregion
 
     void Start()
     {
@@ -46,21 +46,21 @@ public class EnemyChase : MonoBehaviour
         animator = GetComponent<Animator>();
         agent.isStopped = false;
         rb = GetComponent<Rigidbody>();
-       
-        
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
 
         #region calculated variables
         direction = (player.position - transform.position).normalized;
         rayDirection = (transform.forward).normalized;
 
         RaycastHit hit;
-        
+
         // find distance between enemy and player
         float playerDistance = Vector3.Distance(transform.position, player.position);
         // distance between enemy and target location
@@ -68,7 +68,7 @@ public class EnemyChase : MonoBehaviour
         //animator.SetFloat("Walk", agent.speed);
 
         bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance, playerMask);
-        
+
         Debug.DrawLine(rayCastOrigin.position, rayCastOrigin.position + rayDirection * sightDistance, Color.red);
         #endregion
 
@@ -80,7 +80,7 @@ public class EnemyChase : MonoBehaviour
         {
             Patrol();
         }
-        else if ((hasSeenPlayer ) || playerDistance < detectRange || hasDetected) // if enemy sees player
+        else if ((hasSeenPlayer) || playerDistance < detectRange || hasDetected) // if enemy sees player
         {
             // && hit.collider.gameObject.tag != "Untagged" && hit.collider.gameObject.tag != "Door"
             //Debug.Log("saw player");
@@ -94,7 +94,7 @@ public class EnemyChase : MonoBehaviour
                 isSwiping = true;
                 StartCoroutine(ResetAttack());
             }
-            else if (playerDistance <= catchDistance &&isSwiping)
+            else if (playerDistance <= catchDistance && isSwiping)
             {
                 agent.ResetPath();
             }
@@ -117,31 +117,31 @@ public class EnemyChase : MonoBehaviour
     }
     IEnumerator KillPlayer()
     {
-         
+
         yield return new WaitForSeconds(attackTime);
         if (isSwiping && isHittingPlayer)
         {
             Debug.Log("hit player");
-            isFalling=true;
+            isFalling = true;
         }
     }
     public void Patrol()
     {
         SetNewState(State.Patrol);
-       // Debug.Log("Patrol called");
+        // Debug.Log("Patrol called");
         agent.SetDestination(patrolPoint[patrolIndex].position);
         //Debug.Log("agent.isStopped= " + agent.isStopped);
 
         if (agent.remainingDistance < stopDistance && !agent.isStopped) //if enemy reaches its patrol point
         {
-         //   Debug.Log("Enemy reached destination");
+            //   Debug.Log("Enemy reached destination");
 
             agent.isStopped = true; // causes this if statement to be exited
             agent.speed = 0;
 
             //isWalking = false;
             animator.SetBool("isWalking", false);
-           
+
             // Debug.Log("isWalking = " + isWalking);
 
             StartCoroutine("GetNewPatrolPoint");
@@ -207,11 +207,11 @@ public class EnemyChase : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        
+
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectRange);
         Gizmos.DrawWireSphere(transform.position, catchDistance);
-        
+
         //Debug.DrawRay(transform.position + rayCastOffset, direction);
 
     }

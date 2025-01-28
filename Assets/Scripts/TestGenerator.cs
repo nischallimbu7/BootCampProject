@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class MazeGenerator : MonoBehaviour
 {
+    public GameObject enemyPrefab; 
     public NavMeshSurface surface;
     public GameObject floorPrefab;
     public GameObject wallPrefab;
@@ -23,6 +24,7 @@ public class MazeGenerator : MonoBehaviour
         GenerateMaze();
         BuildMaze();
         surface.BuildNavMesh();
+        SpawnEnemy();
     }
 
     void GenerateMaze()
@@ -189,6 +191,31 @@ public class MazeGenerator : MonoBehaviour
                          }
                 }*/
             }
+        }
+    }
+
+    void SpawnEnemy()
+    {
+        List<Vector2Int> floorTiles = new List<Vector2Int>();
+
+        // Collect all floor tiles
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (maze[x, y] == 0)
+                {
+                    floorTiles.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        // Pick a random floor tile
+        if (floorTiles.Count > 0 && enemyPrefab != null)
+        {
+            Vector2Int randomTile = floorTiles[Random.Range(0, floorTiles.Count)];
+            Vector3 enemyPosition = new Vector3(randomTile.x * floorSize, 0, randomTile.y * floorSize);
+            Instantiate(enemyPrefab, enemyPosition, Quaternion.identity, transform);
         }
     }
 

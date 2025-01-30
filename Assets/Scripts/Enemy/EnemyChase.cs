@@ -68,7 +68,7 @@ public class EnemyChase : MonoBehaviour
         distanceToPatrol = Vector3.Distance(transform.position, patrolPoint[patrolIndex].position);
         //animator.SetFloat("Walk", agent.speed);
 
-        bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance, playerMask);
+        bool hasSeenPlayer = Physics.Raycast(rayCastOrigin.position, rayDirection, out hit, sightDistance);
         Debug.Log("hasSeenPlayer= " + hasSeenPlayer);
         Debug.Log(hasSeenPlayer && hit.collider.gameObject.CompareTag("Player"));
         Debug.DrawLine(rayCastOrigin.position, rayCastOrigin.position + rayDirection * sightDistance, Color.red);

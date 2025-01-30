@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.16037738, g: 0.14449094, b: 0.14449094, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.2
@@ -14811,7 +14811,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4337983583695168, guid: 8f978c5848e19084c9fbc6df0138d2b4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.259933
+      value: 22.929754
       objectReference: {fileID: 0}
     - target: {fileID: 4337983583695168, guid: 8f978c5848e19084c9fbc6df0138d2b4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -33270,7 +33270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4861849809368556, guid: 30577724fca9edb43bab2188e72a1cc1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.10018
+      value: 24.77
       objectReference: {fileID: 0}
     - target: {fileID: 4861849809368556, guid: 30577724fca9edb43bab2188e72a1cc1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -35459,6 +35459,10 @@ PrefabInstance:
       propertyPath: distract
       value: 
       objectReference: {fileID: 933185180}
+    - target: {fileID: 4168249470089891101, guid: 420f99c7009b4e747a23eb49fa00a14c, type: 3}
+      propertyPath: sightDistance
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 4168249470089891101, guid: 420f99c7009b4e747a23eb49fa00a14c, type: 3}
       propertyPath: patrolPoint.Array.data[0]
       value: 
